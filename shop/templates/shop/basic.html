@@ -1,0 +1,287 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+        {% block css %}{% endblock %}
+    </style>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Freaky Shoppers</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    {% if user.is_authenticated %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/shop">Shop Now <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/about">About Us</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/tracker">Tracker</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/contact">Contact Us</a>
+            </li>
+
+        </ul>
+        <div class="ml-auto form-inline">
+        <form method='get' action='/shop/search' class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search" id="search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+
+                <ul class="navbar-nav mr-2">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Welcome {{request.user}}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">MY Account</a>
+                            <a class="dropdown-item" href="#">Wishlist</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" id="logout" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            <button type="button" class="btn btn-secondary mx-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom"
+                        data-html="true" data-content="Vivamussagittis lacus vel augue laoreet rutrum faucibus.">
+
+                        CART(<span id="cart">0</span>)
+                </button>
+
+                {% else %}
+                <!-- Button to trigger login modal -->
+                <div class="ml-auto">
+                <button type="button" class="btn btn-success mx-2 my-1 my-sm-0 " data-toggle="modal"
+                    data-target="#loginModal">
+                    LOGIN
+                </button>
+                <!-- Button to trigger signup modal -->
+                <button type="button" class="btn btn-success mx-0 my-1 my-sm-0 " data-toggle="modal"
+                    data-target="#signupModal">
+                    SIGNUP
+                </button>
+                {% endif %}
+                </div>
+            </div>
+
+    </div>
+</nav>
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }} mb-0 alert-dismissible fade show" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-lable="close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    <!----------------------------------------signup modal---------------------------------------------------->
+
+
+    <!-- signup Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModal"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signupModal">signup</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/signup" method="post">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" name="username" id="username "
+                                placeholder="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="firstname">First name</label>
+                            <input type="text" class="form-control" name="firstname" id="firstname"
+                                placeholder="firstname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Last name</label>
+                            <input type="text" class="form-control" name="lastname" id="lastname" placeholder="lastname"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" name="email" id="email"
+                                placeholder="name@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone"
+                                placeholder="enter your phone number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass1">password</label>
+                            <input type="password" class="form-control" name="pass1" id="pass1" placeholder="password"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass2">Confirm password</label>
+                            <input type="password" class="form-control" name="pass2" id="pass2"
+                                placeholder="conferm password" required>
+                        </div>
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!----------------------------------------end signup modal---------------------------------------------------->
+    <!----------------------------------------end login modal---------------------------------------------------->
+
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModal">LOGIN</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/login" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="loginusername">Username</label>
+                            <input type="text" class="form-control" name="loginusername" id="loginusername"
+                                placeholder="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass">password</label>
+                            <input type="password" class="form-control" name="loginpassword" id="loginpassword"
+                                placeholder="password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!----------------------------------------end login modal---------------------------------------------------->
+
+
+    {% block body %}{% endblock %}
+
+<hr>
+<table border="2" width="100%" bgcolor="#172337" >
+ 	<tr>
+ 		<td width="14%"><font color="white"><b>About us</b></font></td>
+ 		<td width="15%"><font color="white"><b>Help</b></font></td>
+ 		<td width="13%"><font color="white"><b>Policy</b></font></td>
+ 		<td width="13%"><font color="white"><b>Social</b></font></td>
+ 		<td width="25%"><font color="white"><b>Mail us</b></font></td>
+
+ 	</tr>
+ 	<hr>
+ 	<tr>
+ 		<td>
+ 			<ul>
+ 				<li><a href="/shop/contact">Contact us</a></li>
+ 				<li><a href="/shop/about">About us</a></li>
+ 				<li><a href="#">Careers</a></li>
+ 				<li><a href="#">stories</a></a></li>
+ 			</ul>
+ 		</td>
+
+ 		<td>
+ 			<ul>
+ 				<li><a href="/shop/paymentsquery">Payments</a></li>
+ 				<li><a href="#">Shipping</a></li>
+ 				<li><a href="/shop/cancelation">Cancellation & Return</a></li>
+ 				<li><a href="#">FAQ</li>
+ 				<li><a href="#">Report infringement</a></li>
+ 			</ul>
+ 		</td>
+
+ 		<td>
+ 			<ul>
+ 				<li><a href="/shop/cancelation">Retuen Policy</a></li>
+ 				<li><a href="/shop/Terms">Terms and condition</a></li>
+ 				<li><a href="/shop/Terms">Security</a></li>
+ 				<li><a href="/shop/Terms">Privacy</a></li>
+ 			</ul>
+ 		</td>
+
+ 		<td>
+
+ 			<ul>
+ 				<li><a href="#">Facebook</a></li>
+ 				<li><a href="#">Twitter</a></li>
+ 				<li><a href="#">Instagram</a></li>
+ 				<li><a href="#">Youtube</a></li>
+ 			</ul>
+
+ 		</td>
+<td><font color="#007bff">
+      <p >shoppersfreaky@gmail.com</p>
+ 			<p>Freaky shoppers Private Limited,
+ 				385,Elias road,kamarati,
+ 			    tetultala,agarapara
+ 				kolkata, 700108,west bengal, India.
+ 			</p>
+</td>
+
+ 	</tr>
+
+ </table>
+ <table width="100%" height="7%" border="2"bgcolor="#172337" >
+ 	<tr>
+ 		<th width="30%"><a href="#"><font color="orange">Sell on freaky shoppers</font></a></th>
+ 		<th width="15%"><a href="#"><font color="yellow"> Advertise</font></a></th>
+ 		<th width="15%"><a href="#"><font color="orange">Gift card</font></a></th>
+ 		<th width="15%"><a href="/shop/contact"><font color="yellow">Help center</font></a></th>
+ 		<th width="25%"><a href="#"><img src="/static/img/paypal.jpg"></a></th>
+ 	</tr>
+ </table>
+{% block footer %}
+{% endblock %}
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="crossorigin="anonymous"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+{% block js %}{% endblock %}
+</body>
+</html>

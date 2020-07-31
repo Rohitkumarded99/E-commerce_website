@@ -1,0 +1,27 @@
+{% extends 'shop/basic.html' %}
+{% block title%} My  Cart {% endblock %}
+{% block body %}
+<div class="container">
+    <!--{{response.ORDERID}}--this is for printing order details-->
+    <div class="col my-4">
+
+        <h4>Payment status regarding your order Id <u>00{{response.ORDERID}}</u> IS </h4>
+        {% if response.RESPCODE == '01' %}
+        <h4><b><u>SUCCESSFUL</u></b></h4><br>
+        <h6><b>THANK YOU FOR ORDER NOW YOU CAN TRACK YOUR ORDER IN TRACKING SECTION<br>AFTER LOGIN AGAIN...</b></h6> 
+        {% else %}
+        FAILURE
+        {% endif%}
+    </div>
+
+    <a class="nav-link" href="/shop">
+        <p>CLICK HERE TO SHOP AGAIN </p>
+            </a>
+
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    localStorage.clear();
+</script>
+{% endblock %}
